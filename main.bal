@@ -1,11 +1,11 @@
 import ballerina/graphql;
 import ballerina/io;
+import ballerina/log;
 import ballerina/sql;
 import ballerina/time;
-import ballerina/log;
+import ballerina/uuid;
 import ballerinax/aws.redshift;
 import ballerinax/aws.redshift.driver as _;
-import ballerina/uuid;
 
 configurable string & readonly jdbcUrl = ?;
 configurable string & readonly user = ?;
@@ -59,8 +59,14 @@ public isolated function getAssetAllocationV2(string accountId) returns record {
         time:Utc end2 = time:utcNow(3);
         io:println("curResults.get() Durationfor request " + accountId + ": " + (time:utcDiffSeconds(end2, startQ) * 1000).toString());
 
-        record {}[] data = check from record {} user in resultSet
-            select user;
+        record {}[] data = [];
+
+        record {}?|error next = resultSet.next();
+
+        while next is record {} {
+            data.push(next);
+            next = resultSet.next();
+        }
 
         time:Utc end3 = time:utcNow(3);
         io:println("Loop Durationfor request " + accountId + ": " + (time:utcDiffSeconds(end3, startQ) * 1000).toString());
