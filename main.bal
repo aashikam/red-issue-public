@@ -65,9 +65,7 @@ public isolated function getAssetAllocationV2(string accountId) returns record {
 
         while next is record {} {
             data.push(next);
-            io:println("Waiting for next() " + accountId);
             next = resultSet.next();
-            io:println("Received next() " + accountId);
         }
 
         time:Utc end3 = time:utcNow(3);
