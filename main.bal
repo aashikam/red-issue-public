@@ -57,7 +57,7 @@ public isolated function getAssetAllocationV2(string accountId) returns record {
         stream<record {}, sql:Error?> resultSet = curResults.get();
 
         time:Utc end2 = time:utcNow(3);
-        io:println("curResults.get() Durationfor request " + accountId + ": " + (time:utcDiffSeconds(end2, startQ) * 1000).toString());
+        io:println("curResults.get() Duration for request " + accountId + ": " + (time:utcDiffSeconds(end2, startQ) * 1000).toString());
 
         record {}[] data = [];
 
@@ -65,11 +65,13 @@ public isolated function getAssetAllocationV2(string accountId) returns record {
 
         while next is record {} {
             data.push(next);
+            io:println("Waiting for next() " + accountId);
             next = resultSet.next();
+            io:println("Received next() " + accountId);
         }
 
         time:Utc end3 = time:utcNow(3);
-        io:println("Loop Durationfor request " + accountId + ": " + (time:utcDiffSeconds(end3, startQ) * 1000).toString());
+        io:println("Loop Duration for request " + accountId + ": " + (time:utcDiffSeconds(end3, startQ) * 1000).toString());
 
         check result.close();
 
