@@ -39,7 +39,7 @@ service /graphql on new graphql:Listener(9090, timeout = 100) {
         } else {
             time:Utc end2 = time:utcNow(3);
             io:println("graphql returning request " + uid + ": " + (time:utcDiffSeconds(end2, startQ) * 1000).toString());
-            return assetAllocationV2.toJsonString();
+            return assetAllocationV2[0].toJsonString();
         }
     }
 }
