@@ -30,13 +30,14 @@ isolated int i = 0;
 // }
 service /graphql on new graphql:Listener(9090, timeout = 100) {
     isolated resource function get greeting() returns string|error {
-        record {}[]|error assetAllocationV2 = check getAssetAllocationV2(uuid:createType1AsString());
-        if assetAllocationV2 is error {
-            log:printError("ERROR: ", assetAllocationV2);
-            return assetAllocationV2;
-        } else {
-            return assetAllocationV2.toJsonString();
-        }
+        return "Hello from choreo";
+        // record {}[]|error assetAllocationV2 = check getAssetAllocationV2(uuid:createType1AsString());
+        // if assetAllocationV2 is error {
+        //     log:printError("ERROR: ", assetAllocationV2);
+        //     return assetAllocationV2;
+        // } else {
+        //     return assetAllocationV2.toJsonString();
+        // }
     }
 }
 
