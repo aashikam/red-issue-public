@@ -1,9 +1,7 @@
 import ballerina/graphql;
 import ballerina/io;
-import ballerina/log;
 import ballerina/sql;
 import ballerina/time;
-import ballerina/uuid;
 import ballerinax/aws.redshift;
 import ballerinax/aws.redshift.driver as _;
 
