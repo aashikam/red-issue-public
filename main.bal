@@ -59,14 +59,8 @@ public isolated function getAssetAllocationV2(string accountId) returns record {
         time:Utc end2 = time:utcNow(3);
         io:println("curResults.get() Durationfor request " + accountId + ": " + (time:utcDiffSeconds(end2, startQ) * 1000).toString());
 
-        record {}[] data = [];
-
-        record {}?|error next = resultSet.next();
-
-        while next is record {} {
-            data.push(next);
-            next = resultSet.next();
-        }
+        record {}[] data = check from record {} user in resultSet
+            select user;
 
         time:Utc end3 = time:utcNow(3);
         io:println("Loop Durationfor request " + accountId + ": " + (time:utcDiffSeconds(end3, startQ) * 1000).toString());
