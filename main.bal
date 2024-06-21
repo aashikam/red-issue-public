@@ -2,8 +2,10 @@ import ballerina/graphql;
 import ballerina/io;
 import ballerina/sql;
 import ballerina/time;
+import ballerina/log;
 import ballerinax/aws.redshift;
 import ballerinax/aws.redshift.driver as _;
+import ballerina/uuid;
 
 configurable string & readonly jdbcUrl = ?;
 configurable string & readonly user = ?;
@@ -28,14 +30,17 @@ isolated int i = 0;
 // }
 service /graphql on new graphql:Listener(9090, timeout = 100) {
     isolated resource function get greeting() returns string|error {
-        return "Hello from choreo";
-        // record {}[]|error assetAllocationV2 = check getAssetAllocationV2(uuid:createType1AsString());
-        // if assetAllocationV2 is error {
-        //     log:printError("ERROR: ", assetAllocationV2);
-        //     return assetAllocationV2;
-        // } else {
-        //     return assetAllocationV2.toJsonString();
-        // }
+        time:Utc startQ = time:utcNow(3);
+        string uid = uuid:createType1AsString();
+        record {}[]|error assetAllocationV2 = check getAssetAllocationV2(uid);
+        if assetAllocationV2 is error {
+            log:printError("ERROR: ", assetAllocationV2);
+            return assetAllocationV2;
+        } else {
+            time:Utc end2 = time:utcNow(3);
+            io:println("graphql returning request " + uid + ": " + (time:utcDiffSeconds(end2, startQ) * 1000).toString());
+            return assetAllocationV2.toJsonString();
+        }
     }
 }
 
